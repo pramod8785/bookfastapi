@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  db:
+    build: ./db
+    container_name: mydb
+    environment:
+      POSTGRES_DB: gutendex
+      POSTGRES_USER: pramod
+      POSTGRES_PASSWORD: pramod123
+    ports:
+      - "5432:5432"
+    networks:
+      - mynetwork
+  app:
+    build: ./api
+    container_name: myapi
+    environment:
+      DATABASE_URL: "postgresql://pramod:pramod123@db:5432/gutendex"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+      
+networks:
+  mynetwork:
+    driver: bridge
